@@ -26,6 +26,7 @@ class Scraper:
                 salary_span = vacancie.find('span', {'data-qa': 'vacancy-serp__vacancy-compensation'})
                 salary = salary_span.text if salary_span and self.currency in salary_span.text else 'Не указана'
 
+
                 if self.currency in salary:
                     link = vacancie.find('a').get('href')
                     check_keywords = requests.get(link, headers=self.headers)
@@ -54,4 +55,3 @@ class Scraper:
             json_filename = 'vacancies.json'
             with open(json_filename, 'w', encoding='utf-8') as json_file:
                 json.dump(self.vacancies, json_file, ensure_ascii=False, indent=4)
-

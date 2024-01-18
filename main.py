@@ -24,6 +24,7 @@ if __name__ == '__main__':
             '1': ('$', 'USD'),
             '2': ('₽', 'RUB'),
             '3': ('€', 'EUR'),
+            '4': ('', 'Все вакансии'),
         }
         for key, value in currency_dict.items():
             print(f'{key} - {value[0]} ({value[1]})')
