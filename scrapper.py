@@ -2,9 +2,10 @@ import json
 import fake_headers
 import requests
 from bs4 import BeautifulSoup
-
+from logger import logger
 
 class Scraper:
+    @logger
     def __init__(self, search_word: str, keywords_plus: list, currency: str, page_count: int):
         self.headers = fake_headers.Headers(headers=True).generate()
         self.search_word = search_word
@@ -14,8 +15,8 @@ class Scraper:
 
     def get_vacancies(self):
         self.vacancies = []
-        for i in range(self.page_count):
-            self.params = {'text': self.search_word, 'area': [1, 2], 'items_on_page': 20, 'page': i}
+        for i in range(int(self.page_count)):
+            self.params = {'text': self.search_word, 'area': [113], 'items_on_page': 20, 'page': i}
             self.url = 'https://spb.hh.ru/search/vacancy'
             self.page = requests.get(self.url, params=self.params, headers=self.headers)
             self.soup = BeautifulSoup(self.page.text, "lxml")
@@ -25,7 +26,6 @@ class Scraper:
             for vacancie in finded_vacancies:
                 salary_span = vacancie.find('span', {'data-qa': 'vacancy-serp__vacancy-compensation'})
                 salary = salary_span.text if salary_span and self.currency in salary_span.text else 'Не указана'
-
 
                 if self.currency in salary:
                     link = vacancie.find('a').get('href')
@@ -55,3 +55,5 @@ class Scraper:
             json_filename = 'vacancies.json'
             with open(json_filename, 'w', encoding='utf-8') as json_file:
                 json.dump(self.vacancies, json_file, ensure_ascii=False, indent=4)
+                print(f'Вакансии сохранены в файл {json_filename}')
+        return self.vacancies

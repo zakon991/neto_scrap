@@ -2,9 +2,10 @@ import fake_headers
 import requests
 from bs4 import BeautifulSoup
 from scrapper import Scraper
-
+from logger import logger
 
 if __name__ == '__main__':
+    @logger
     def get_page_count(search_word: str):
         params = {'text': search_word, 'area': [1, 2], 'items_on_page': 20}
         headers = fake_headers.Headers(headers=True).generate()
